@@ -1,98 +1,149 @@
 export const site = {
   name: "Cnerium",
   tagline: "Fast minimalist web framework for Vix.",
-  description:
-    "Cnerium is a fast minimalist web framework built for Vix. It provides a clean App API, deterministic routing, middleware support, JSON responses, route parameters, and direct access to the underlying runtime when needed.",
 
   package: {
     name: "@cnerium/app",
-    registryName: "cnerium/app",
     version: "0.5.0",
     registryUrl: "https://vixcpp.com/registry/pkg/cnerium/app",
   },
 
   links: {
     docs: "https://docs.cnerium.dev",
-    registry: "https://vixcpp.com/registry/pkg/cnerium/app",
-    vix: "https://vixcpp.com",
+    registry: "https://registry.vixcpp.com/pkg/cnerium/app",
     github: "https://github.com/cnerium/app",
+    vix: "https://vixcpp.com",
   },
 
   navigation: [
-    {
-      label: "Docs",
-      href: "https://docs.cnerium.dev",
-      external: true,
-    },
+    { label: "Docs", href: "https://docs.cnerium.dev", external: true },
     {
       label: "Registry",
-      href: "https://vixcpp.com/registry/pkg/cnerium/app",
+      href: "https://registry.vixcpp.com/pkg/cnerium/app",
       external: true,
     },
-    {
-      label: "Vix",
-      href: "https://vixcpp.com",
-      external: true,
-    },
+    { label: "GitHub", href: "https://github.com/cnerium/app", external: true },
+    { label: "Vix", href: "https://vixcpp.com", external: true },
   ],
 
   hero: {
-    eyebrow: "Header-only. Deterministic. Built for Vix.",
-    title: "Cnerium",
-    subtitle: "Fast minimalist web framework for Vix.",
-    text: "Build modern C++ web applications with a small App API, deterministic routing, middleware, JSON responses, and a runtime-powered foundation.",
+    title: "A web framework for Vix.",
+    subtitle:
+      "Cnerium adds routing, middleware, JSON responses, and runtime access to Vix with a small C++ API.",
     primaryAction: {
-      label: "Read the docs",
+      label: "Get started",
       href: "https://docs.cnerium.dev",
       external: true,
     },
     secondaryAction: {
-      label: "View package",
-      href: "https://vixcpp.com/registry/pkg/cnerium/app",
-      external: true,
-    },
-  },
-
-  codePreview: {
-    label: "Hello world",
-    filename: "main.cpp",
-    title: "Build a server in a few lines.",
-    text: "Create an app, define a route, and run it directly. For routing, middleware, JSON, runtime access, and advanced examples, read the documentation.",
-    docsAction: {
-      label: "More in the docs",
+      label: "Docs",
       href: "https://docs.cnerium.dev",
       external: true,
     },
-    code: `#include <cnerium/app/app.hpp>
+    version: {
+      label: "v0.5.0 Latest",
+      href: "https://github.com/cnerium/app/releases",
+    },
+  },
 
+  codeTabs: [
+    {
+      label: "Hello world",
+      filename: "main.cpp",
+      code: `#include <cnerium/app/app.hpp>
 using namespace cnerium::app;
 
 int main()
 {
   App app;
 
-  app.get("/", [](AppContext &ctx)
-          { ctx.text("Hello from Cnerium"); });
+  app.get("/", [](AppContext &ctx){
+    ctx.text("Hello from Cnerium");
+  });
 
   app.run();
 }`,
-  },
+    },
+    {
+      label: "Route params",
+      filename: "main.cpp",
+      code: `#include <cnerium/app/app.hpp>
+using namespace cnerium::app;
+
+int main()
+{
+  App app;
+
+  app.get("/users/:id", [](AppContext &ctx){
+    auto id = ctx.param("id");
+    ctx.text(std::string(id));
+  });
+
+  app.run();
+}`,
+    },
+    {
+      label: "JSON response",
+      filename: "main.cpp",
+      code: `#include <cnerium/app/app.hpp>
+using namespace cnerium::app;
+
+int main()
+{
+  App app;
+
+  app.get("/", [](AppContext &ctx){
+    ctx.json({
+      {"ok", true},
+      {"framework", "Cnerium"}
+    });
+  });
+
+  app.run();
+}`,
+    },
+    {
+      label: "Middleware",
+      filename: "main.cpp",
+      code: `#include <cnerium/app/app.hpp>
+using namespace cnerium::app;
+
+int main()
+{
+  App app;
+
+  app.use([](auto &ctx, auto next){
+    ctx.response().set_header("X-App", "Cnerium");
+    next();
+  });
+
+  app.get("/", [](AppContext &ctx){
+    ctx.text("Middleware applied");
+  });
+
+  app.run();
+}`,
+    },
+    {
+      label: "Install",
+      filename: "terminal",
+      code: `# Install via Vix
+vix add @cnerium/app
+vix install
+vix run main.cpp`,
+    },
+  ],
 
   footer: {
-    text: "Official website for Cnerium, the fast minimalist web framework for Vix.",
+    text: "The fast minimalist web framework for Vix.",
     links: [
-      {
-        label: "Docs",
-        href: "https://docs.cnerium.dev",
-      },
+      { label: "Docs", href: "https://docs.cnerium.dev" },
       {
         label: "Registry",
         href: "https://vixcpp.com/registry/pkg/cnerium/app",
       },
-      {
-        label: "GitHub",
-        href: "https://github.com/cnerium/app",
-      },
+      { label: "GitHub", href: "https://github.com/cnerium/app" },
+      { label: "Vix", href: "https://vixcpp.com" },
     ],
   },
 };

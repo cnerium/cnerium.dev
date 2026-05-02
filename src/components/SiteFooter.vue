@@ -2,17 +2,16 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-inner">
-        <div class="footer-brand">
-          <p class="footer-title">
-            {{ site.name }}
-          </p>
 
-          <p class="footer-text">
-            {{ site.footer.text }}
-          </p>
+        <div class="footer-brand">
+          <span class="footer-logo">
+            <span class="brand-dot small" aria-hidden="true"></span>
+            cnerium
+          </span>
+          <p class="footer-text">{{ site.footer.text }}</p>
         </div>
 
-        <div class="footer-links">
+        <nav class="footer-links" aria-label="Footer navigation">
           <a
             v-for="link in site.footer.links"
             :key="link.label"
@@ -23,7 +22,8 @@
           >
             {{ link.label }}
           </a>
-        </div>
+        </nav>
+
       </div>
     </div>
   </footer>
