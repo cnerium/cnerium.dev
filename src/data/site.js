@@ -56,7 +56,7 @@ export const site = {
     },
     secondaryAction: {
       label: "View package",
-      href: "https://vixcpp.com/registry/pkg/cnerium/app",
+      href: "https://registry.vixcpp.com/pkg/cnerium/app",
       external: true,
     },
     version: {
