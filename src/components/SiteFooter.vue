@@ -2,12 +2,17 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-inner">
-
         <div class="footer-brand">
           <span class="footer-logo">
-            <span class="brand-dot small" aria-hidden="true"></span>
+            <img
+              class="footer-logo-img"
+              src="/logo.svg"
+              alt=""
+              aria-hidden="true"
+            />
             cnerium
           </span>
+
           <p class="footer-text">{{ site.footer.text }}</p>
         </div>
 
@@ -23,7 +28,6 @@
             {{ link.label }}
           </a>
         </nav>
-
       </div>
     </div>
   </footer>

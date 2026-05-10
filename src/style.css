@@ -1235,3 +1235,118 @@ main {
     display: inline-flex;
   }
 }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+/* Mobile menu must stay above the hero */
+.site-header {
+  z-index: 9999;
+}
+
+.mobile-menu-button {
+  position: relative;
+  z-index: 10001;
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    z-index: 10000;
+    height: calc(100vh - var(--header-h));
+    background:
+      radial-gradient(circle at 70% 18%, rgba(34, 197, 94, 0.08), transparent 34%),
+      var(--bg);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+}
+@media (max-width: 640px) {
+  .nav-links {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+@media (max-width: 640px) {
+  .nav {
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.35rem;
+
+    margin-left: 0;
+    padding: 1.25rem;
+    overflow-y: auto;
+
+    border-top: 1px solid var(--border);
+    background:
+      radial-gradient(circle at 70% 18%, rgba(34, 197, 94, 0.08), transparent 34%),
+      var(--bg);
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-link {
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 0 1rem;
+    border-radius: var(--r-sm);
+    font-size: 0.98rem;
+  }
+
+  .mobile-menu-button {
+    display: inline-flex;
+    position: relative;
+    z-index: 10001;
+  }
+}
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.footer-logo-img {
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex-shrink: 0;
+}

@@ -1,43 +1,62 @@
 export const site = {
   name: "Cnerium",
-  tagline: "Fast minimalist web framework for Vix.",
+  tagline: "A fast minimalist web framework for Vix.",
 
   package: {
-    name: "@cnerium/app",
+    name: "cnerium/app",
     version: "0.5.0",
     registryUrl: "https://vixcpp.com/registry/pkg/cnerium/app",
   },
 
   links: {
     docs: "https://docs.cnerium.dev",
-    registry: "https://registry.vixcpp.com/pkg/cnerium/app",
+    registry: "https://vixcpp.com/registry/pkg/cnerium/app",
     github: "https://github.com/cnerium/app",
+    releases: "https://github.com/cnerium/app/releases",
     vix: "https://vixcpp.com",
+    softadastra: "https://softadastra.com",
   },
 
   navigation: [
-    { label: "Docs", href: "https://docs.cnerium.dev", external: true },
     {
-      label: "Registry",
-      href: "https://registry.vixcpp.com/pkg/cnerium/app",
+      label: "Docs",
+      href: "https://docs.cnerium.dev",
       external: true,
     },
-    { label: "GitHub", href: "https://github.com/cnerium/app", external: true },
-    { label: "Vix", href: "https://vixcpp.com", external: true },
+    {
+      label: "Registry",
+      href: "https://vixcpp.com/registry/pkg/cnerium/app",
+      external: true,
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/cnerium/app",
+      external: true,
+    },
+    {
+      label: "Vix",
+      href: "https://vixcpp.com",
+      external: true,
+    },
+    {
+      label: "Softadastra",
+      href: "https://softadastra.com",
+      external: true,
+    },
   ],
 
   hero: {
     title: "A web framework for Vix.",
     subtitle:
-      "Cnerium adds routing, middleware, JSON responses, and runtime access to Vix with a small C++ API.",
+      "Cnerium adds routing, middleware, JSON responses, error handling, and runtime access to Vix through a small C++ API. Maintained by Softadastra.",
     primaryAction: {
       label: "Get started",
-      href: "https://docs.cnerium.dev",
+      href: "https://docs.cnerium.dev/quick-start",
       external: true,
     },
     secondaryAction: {
-      label: "Docs",
-      href: "https://docs.cnerium.dev",
+      label: "View package",
+      href: "https://vixcpp.com/registry/pkg/cnerium/app",
       external: true,
     },
     version: {
@@ -51,35 +70,36 @@ export const site = {
       label: "Hello world",
       filename: "main.cpp",
       code: `#include <cnerium/app/app.hpp>
+#include <vix/console.hpp>
 using namespace cnerium::app;
 
-int main()
-{
+int main(){
   App app;
 
   app.get("/", [](AppContext &ctx){
     ctx.text("Hello from Cnerium");
   });
 
-  app.run();
+  app.listen("127.0.0.1", 8080, [](){
+    vix::console.info("Cnerium app is ready");
+  });
 }`,
     },
     {
       label: "Route params",
       filename: "main.cpp",
       code: `#include <cnerium/app/app.hpp>
+#include <string>
 using namespace cnerium::app;
 
-int main()
-{
+int main(){
   App app;
 
   app.get("/users/:id", [](AppContext &ctx){
-    auto id = ctx.param("id");
-    ctx.text(std::string(id));
+    ctx.text(std::string(ctx.param("id")));
   });
 
-  app.run();
+  app.listen("127.0.0.1", 8080);
 }`,
     },
     {
@@ -88,18 +108,18 @@ int main()
       code: `#include <cnerium/app/app.hpp>
 using namespace cnerium::app;
 
-int main()
-{
+int main(){
   App app;
 
-  app.get("/", [](AppContext &ctx){
+  app.get("/health", [](AppContext &ctx){
     ctx.json({
       {"ok", true},
-      {"framework", "Cnerium"}
+      {"framework", "Cnerium"},
+      {"status", "healthy"}
     });
   });
 
-  app.run();
+  app.listen("127.0.0.1", 8080);
 }`,
     },
     {
@@ -108,8 +128,7 @@ int main()
       code: `#include <cnerium/app/app.hpp>
 using namespace cnerium::app;
 
-int main()
-{
+int main(){
   App app;
 
   app.use([](auto &ctx, auto next){
@@ -121,29 +140,47 @@ int main()
     ctx.text("Middleware applied");
   });
 
-  app.run();
+  app.listen("127.0.0.1", 8080);
 }`,
     },
     {
       label: "Install",
       filename: "terminal",
-      code: `# Install via Vix
-vix add @cnerium/app
-vix install
-vix run main.cpp`,
+      code: `# Create a Vix project
+vix new api
+cd api
+
+# Add Cnerium
+vix add cnerium/app
+
+# Start development server
+vix dev`,
     },
   ],
 
   footer: {
-    text: "The fast minimalist web framework for Vix.",
+    text: "A fast minimalist web framework for Vix, maintained by Softadastra.",
     links: [
-      { label: "Docs", href: "https://docs.cnerium.dev" },
+      {
+        label: "Docs",
+        href: "https://docs.cnerium.dev",
+      },
       {
         label: "Registry",
         href: "https://vixcpp.com/registry/pkg/cnerium/app",
       },
-      { label: "GitHub", href: "https://github.com/cnerium/app" },
-      { label: "Vix", href: "https://vixcpp.com" },
+      {
+        label: "GitHub",
+        href: "https://github.com/cnerium/app",
+      },
+      {
+        label: "Vix",
+        href: "https://vixcpp.com",
+      },
+      {
+        label: "Softadastra",
+        href: "https://softadastra.com",
+      },
     ],
   },
 };

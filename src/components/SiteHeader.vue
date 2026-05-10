@@ -3,9 +3,13 @@
     <div class="container">
       <nav class="nav" aria-label="Main navigation">
         <a class="brand" href="/" aria-label="Cnerium home" @click="closeMenu">
-          <span class="brand-mark" aria-hidden="true">
-            <span class="brand-core"></span>
-          </span>
+          <img
+            class="brand-logo"
+            src="/logo.svg"
+            alt=""
+            aria-hidden="true"
+          />
+
           <span class="brand-text">cnerium</span>
         </a>
 
