@@ -5,12 +5,12 @@ export const site = {
   package: {
     name: "cnerium/app",
     version: "0.5.0",
-    registryUrl: "https://vixcpp.com/registry/pkg/cnerium/app",
+    registryUrl: "https://registry.vixcpp.com/pkg/cnerium/app",
   },
 
   links: {
     docs: "https://docs.cnerium.dev",
-    registry: "https://vixcpp.com/registry/pkg/cnerium/app",
+    registry: "https://registry.vixcpp.com/pkg/cnerium/app",
     github: "https://github.com/cnerium/app",
     releases: "https://github.com/cnerium/app/releases",
     vix: "https://vixcpp.com",
@@ -25,7 +25,7 @@ export const site = {
     },
     {
       label: "Registry",
-      href: "https://vixcpp.com/registry/pkg/cnerium/app",
+      href: "https://registry.vixcpp.com/pkg/cnerium/app",
       external: true,
     },
     {
@@ -167,7 +167,7 @@ vix dev`,
       },
       {
         label: "Registry",
-        href: "https://vixcpp.com/registry/pkg/cnerium/app",
+        href: "https://registry.vixcpp.com/pkg/cnerium/app",
       },
       {
         label: "GitHub",
