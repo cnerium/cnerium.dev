@@ -1,18 +1,18 @@
 export const site = {
   name: "Cnerium",
-  tagline: "A fast minimalist web framework for Vix.",
+  tagline: "A reliability-first backend layer for Vix.",
 
   package: {
-    name: "cnerium/app",
-    version: "0.5.0",
-    registryUrl: "https://registry.vixcpp.com/pkg/cnerium/app",
+    name: "softadastra/cnerium",
+    version: "1.0.0",
+    registryUrl: "https://registry.vixcpp.com/pkg/softadastra/cnerium",
   },
 
   links: {
     docs: "https://docs.cnerium.dev",
-    registry: "https://registry.vixcpp.com/pkg/cnerium/app",
-    github: "https://github.com/cnerium/app",
-    releases: "https://github.com/cnerium/app/releases",
+    registry: "https://registry.vixcpp.com/pkg/softadastra/cnerium",
+    github: "https://github.com/softadastra/cnerium",
+    releases: "https://github.com/softadastra/cnerium/releases",
     vix: "https://vixcpp.com",
     softadastra: "https://softadastra.com",
   },
@@ -25,12 +25,12 @@ export const site = {
     },
     {
       label: "Registry",
-      href: "https://registry.vixcpp.com/pkg/cnerium/app",
+      href: "https://registry.vixcpp.com/pkg/softadastra/cnerium",
       external: true,
     },
     {
       label: "GitHub",
-      href: "https://github.com/cnerium/app",
+      href: "https://github.com/softadastra/cnerium",
       external: true,
     },
     {
@@ -46,102 +46,100 @@ export const site = {
   ],
 
   hero: {
-    title: "A web framework for Vix.",
+    title: "Reliability for critical Vix backend operations.",
     subtitle:
-      "Cnerium adds routing, middleware, JSON responses, error handling, and runtime access to Vix through a small C++ API. Maintained by Softadastra.",
+      "Cnerium attaches to an existing Vix backend and adds durable routes, idempotency, replay protection, stored responses, and retry-safe execution for critical write operations. Maintained by Softadastra.",
     primaryAction: {
       label: "Get started",
-      href: "https://docs.cnerium.dev/quick-start",
+      href: "https://docs.cnerium.dev/getting-started/",
       external: true,
     },
     secondaryAction: {
       label: "View package",
-      href: "https://registry.vixcpp.com/pkg/cnerium/app",
+      href: "https://registry.vixcpp.com/pkg/softadastra/cnerium",
       external: true,
     },
     version: {
-      label: "v0.5.0 Latest",
-      href: "https://github.com/cnerium/app/releases",
+      label: "v1.0.0 Latest",
+      href: "https://github.com/softadastra/cnerium/releases",
     },
   },
 
   codeTabs: [
     {
-      label: "Hello world",
+      label: "Attach to Vix",
       filename: "main.cpp",
-      code: `#include <cnerium/app/app.hpp>
-#include <vix/console.hpp>
-using namespace cnerium::app;
+      code: `#include <vix.hpp>
+#include <cnerium/cnerium.hpp>
 
-int main(){
-  App app;
+int main()
+{
+  vix::App app;
 
-  app.get("/", [](AppContext &ctx){
-    ctx.text("Hello from Cnerium");
-  });
+  auto cnerium = cnerium::attach(app);
 
-  app.listen("127.0.0.1", 8080, [](){
-    vix::console.info("Cnerium app is ready");
-  });
+  cnerium.start();
+  app.run();
 }`,
     },
     {
-      label: "Route params",
+      label: "Durable route",
       filename: "main.cpp",
-      code: `#include <cnerium/app/app.hpp>
-#include <string>
-using namespace cnerium::app;
+      code: `#include <vix.hpp>
+#include <cnerium/cnerium.hpp>
 
-int main(){
-  App app;
+int main()
+{
+  vix::App app;
 
-  app.get("/users/:id", [](AppContext &ctx){
-    ctx.text(std::string(ctx.param("id")));
-  });
+  auto cnerium = cnerium::attach(app);
 
-  app.listen("127.0.0.1", 8080);
+  cnerium.durable_post(
+      "/orders",
+      "orders.create",
+      [](cnerium::DurableRequest &request)
+      {
+        return cnerium::created({
+            {"ok", true}
+        });
+      });
+
+  cnerium.start();
+  app.run();
 }`,
     },
     {
-      label: "JSON response",
-      filename: "main.cpp",
-      code: `#include <cnerium/app/app.hpp>
-using namespace cnerium::app;
+      label: "Idempotency",
+      filename: "terminal",
+      code: `curl -i -X POST http://127.0.0.1:8080/orders \\
+  -H "Content-Type: application/json" \\
+  -H "Idempotency-Key: order-123" \\
+  -d '{"product_id":"p1","quantity":2}'
 
-int main(){
-  App app;
+# Same key + same body
+# -> stored response is replayed
 
-  app.get("/health", [](AppContext &ctx){
-    ctx.json({
-      {"ok", true},
-      {"framework", "Cnerium"},
-      {"status", "healthy"}
-    });
-  });
-
-  app.listen("127.0.0.1", 8080);
-}`,
+# Same key + different body
+# -> 409 Conflict`,
     },
     {
-      label: "Middleware",
+      label: "Realtime event",
       filename: "main.cpp",
-      code: `#include <cnerium/app/app.hpp>
-using namespace cnerium::app;
+      code: `cnerium.durable_post(
+    "/orders",
+    "orders.create",
+    [&cnerium](cnerium::DurableRequest &request)
+    {
+      cnerium.emit(
+          "order.created",
+          cnerium::support::object({
+              {"ok", cnerium::Json(true)}
+          }));
 
-int main(){
-  App app;
-
-  app.use([](auto &ctx, auto next){
-    ctx.response().set_header("X-App", "Cnerium");
-    next();
-  });
-
-  app.get("/", [](AppContext &ctx){
-    ctx.text("Middleware applied");
-  });
-
-  app.listen("127.0.0.1", 8080);
-}`,
+      return cnerium::created({
+          {"ok", true}
+      });
+    });`,
     },
     {
       label: "Install",
@@ -151,15 +149,16 @@ vix new api
 cd api
 
 # Add Cnerium
-vix add cnerium/app
+vix add softadastra/cnerium
 
-# Start development server
-vix dev`,
+# Build and run with Vix
+vix build
+vix run`,
     },
   ],
 
   footer: {
-    text: "A fast minimalist web framework for Vix, maintained by Softadastra.",
+    text: "A reliability-first backend layer for Vix, maintained by Softadastra.",
     links: [
       {
         label: "Docs",
@@ -167,11 +166,11 @@ vix dev`,
       },
       {
         label: "Registry",
-        href: "https://registry.vixcpp.com/pkg/cnerium/app",
+        href: "https://registry.vixcpp.com/pkg/softadastra/cnerium",
       },
       {
         label: "GitHub",
-        href: "https://github.com/cnerium/app",
+        href: "https://github.com/softadastra/cnerium",
       },
       {
         label: "Vix",
